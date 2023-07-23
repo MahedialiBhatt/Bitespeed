@@ -1,15 +1,12 @@
-STEPS to start Application:
+- Steps to start Application:
     1. npm install
-    2. Create bitespeed database
-    3. create .env and add variables with value from .env.example
-    4. use npm run start OR npm run start:dev
+    2. create .env and add variables with value from .env.example
+    3. use npm run start OR npm run start:dev
 
-
-
-- After starting application call this API
+- Endpoint of identify (Here I assume SERVER_PORT = 3000)
    POST localhost:3000/api.identify with BODY email or/and phoneNumber
 
-- cURL of identify
+- cURL of identify:
 
   curl --location 'localhost:3000/api/identify' \
   --header 'Content-Type: application/json' \
