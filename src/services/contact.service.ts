@@ -51,10 +51,7 @@ const ContactService = {
         phoneNumber,
         email
       );
-      console.log(
-        "New primary contact created with id =",
-        newPrimaryContact.id
-      );
+      console.log("New primary contact created with id =", newPrimaryContact);
     } else if (primaryContactDataByEmail || primaryContactDataByPhone) {
       const newSecondaryContact =
         await contactRepository.createNewSecondaryContact(
@@ -66,7 +63,7 @@ const ContactService = {
         );
       console.log(
         "New secondary contact created with id =",
-        newSecondaryContact.id
+        newSecondaryContact
       );
     } else if (secondaryContactDataByEmail || secondaryContactDataByPhone) {
       let id = secondaryContactDataByEmail
@@ -88,7 +85,7 @@ const ContactService = {
         );
       console.log(
         "New secondary contact created with id =",
-        newSecondaryContact.id
+        newSecondaryContact
       );
     }
 
