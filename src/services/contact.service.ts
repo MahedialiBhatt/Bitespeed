@@ -52,7 +52,14 @@ const ContactService = {
         email
       );
       console.log("New primary contact created with id =", newPrimaryContact);
-    } else if (primaryContactDataByEmail || primaryContactDataByPhone) {
+    } else if (
+      (primaryContactDataByEmail &&
+        ((!primaryContactDataByEmail.email && email) ||
+          (!primaryContactDataByEmail.phoneNumber && phoneNumber))) ||
+      (primaryContactDataByPhone &&
+        ((!primaryContactDataByPhone.email && email) ||
+          (!primaryContactDataByPhone.phoneNumber && phoneNumber)))
+    ) {
       const newSecondaryContact =
         await contactRepository.createNewSecondaryContact(
           primaryContactDataByEmail
@@ -65,7 +72,14 @@ const ContactService = {
         "New secondary contact created with id =",
         newSecondaryContact
       );
-    } else if (secondaryContactDataByEmail || secondaryContactDataByPhone) {
+    } else if (
+      (secondaryContactDataByEmail &&
+        ((!secondaryContactDataByEmail.email && email) ||
+          (!secondaryContactDataByEmail.phoneNumber && phoneNumber))) ||
+      (secondaryContactDataByPhone &&
+        ((!secondaryContactDataByPhone.email && email) ||
+          (!secondaryContactDataByPhone.phoneNumber && phoneNumber)))
+    ) {
       let id = secondaryContactDataByEmail
         ? secondaryContactDataByEmail.linkedId
         : secondaryContactDataByPhone.linkedId;
