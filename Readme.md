@@ -19,6 +19,6 @@ Tech Stack:
  1. NodeJS
  2. ExpressJS
  3. Typescript
- 4. MySql
+ 4. MySql 8.0.33
  5. Rest API  
 

@@ -22,18 +22,17 @@ async function createDatabaseAndTable() {
 
     // Create the table if it doesn't exist
     await connection.query(`
-      CREATE TABLE IF NOT EXISTS Contact (
+    CREATE TABLE IF NOT EXISTS Contact (
       id INT UNSIGNED NOT NULL AUTO_INCREMENT,
       phoneNumber VARCHAR(16) DEFAULT NULL,
-      email VARCHAR(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+      email VARCHAR(25) DEFAULT NULL,
       linkedId INT DEFAULT NULL,
-      linkPrecedence ENUM('PRIMARY','SECONDARY') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'PRIMARY',
+      linkPrecedence ENUM('PRIMARY','SECONDARY') NOT NULL DEFAULT 'PRIMARY',
       createdAt TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
       updatedAt TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       deletedAt TIMESTAMP NULL DEFAULT NULL,
       PRIMARY KEY (id)
-    ) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-    `);
+    );`);
 
     console.log("DB initialized...");
 
