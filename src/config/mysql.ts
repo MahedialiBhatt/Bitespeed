@@ -22,7 +22,7 @@ async function createDatabaseAndTable() {
 
     // Create the table if it doesn't exist
     await connection.query(`
-    CREATE TABLE IF NOT EXISTS Contact (
+    CREATE TABLE IF NOT EXISTS contact (
       id INT UNSIGNED NOT NULL AUTO_INCREMENT,
       phoneNumber VARCHAR(16) DEFAULT NULL,
       email VARCHAR(25) DEFAULT NULL,
