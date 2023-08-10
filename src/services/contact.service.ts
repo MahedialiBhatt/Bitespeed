@@ -6,6 +6,9 @@ const ContactService = {
       primaryContactDataByPhone,
       secondaryContactDataByEmail,
       secondaryContactDataByPhone;
+
+    let contactByEmailAndPhone;
+
     if (email) {
       primaryContactDataByEmail =
         await contactRepository.getPrimaryContactByEmail(email);
@@ -20,8 +23,28 @@ const ContactService = {
         await contactRepository.getSecondaryContactByPhone(phoneNumber);
     }
 
-    // Primary to Secondary
+    if (email && phoneNumber)
+      contactByEmailAndPhone =
+        await contactRepository.getContactByEmailAndPhone(email, phoneNumber);
+
+    // Create New contact if primary contact not exist
     if (
+      email &&
+      phoneNumber &&
+      !contactByEmailAndPhone &&
+      !primaryContactDataByEmail &&
+      !primaryContactDataByPhone &&
+      !secondaryContactDataByEmail &&
+      !secondaryContactDataByPhone
+    ) {
+      const newPrimaryContact = await contactRepository.createNewPrimaryContact(
+        phoneNumber,
+        email
+      );
+      console.log("New primary contact created with id =", newPrimaryContact);
+    }
+    // Two distinct contact found with email and phone
+    else if (
       primaryContactDataByEmail &&
       primaryContactDataByPhone &&
       primaryContactDataByEmail.id != primaryContactDataByPhone.id
@@ -41,30 +64,22 @@ const ContactService = {
         );
       }
       console.log("Contact updated to Secondary contact");
-    } else if (
-      !primaryContactDataByEmail &&
-      !primaryContactDataByPhone &&
-      !secondaryContactDataByEmail &&
-      !secondaryContactDataByPhone
-    ) {
-      const newPrimaryContact = await contactRepository.createNewPrimaryContact(
-        phoneNumber,
-        email
-      );
-      console.log("New primary contact created with id =", newPrimaryContact);
-    } else if (
-      (primaryContactDataByEmail &&
-        ((!primaryContactDataByEmail.email && email) ||
-          (!primaryContactDataByEmail.phoneNumber && phoneNumber))) ||
-      (primaryContactDataByPhone &&
-        ((!primaryContactDataByPhone.email && email) ||
-          (!primaryContactDataByPhone.phoneNumber && phoneNumber)))
+    }
+    // Secondary contact if email matching and new phoneNumber
+    else if (
+      phoneNumber &&
+      !contactByEmailAndPhone &&
+      (primaryContactDataByEmail || secondaryContactDataByEmail) &&
+      ((primaryContactDataByEmail &&
+        primaryContactDataByEmail.phoneNumber != phoneNumber) ||
+        (secondaryContactDataByEmail &&
+          secondaryContactDataByEmail.phoneNumber != phoneNumber))
     ) {
       const newSecondaryContact =
         await contactRepository.createNewSecondaryContact(
           primaryContactDataByEmail
             ? primaryContactDataByEmail.id
-            : primaryContactDataByPhone.id,
+            : secondaryContactDataByEmail.linkedId,
           phoneNumber,
           email
         );
@@ -73,27 +88,19 @@ const ContactService = {
         newSecondaryContact
       );
     } else if (
-      (secondaryContactDataByEmail &&
-        ((!secondaryContactDataByEmail.email && email) ||
-          (!secondaryContactDataByEmail.phoneNumber && phoneNumber))) ||
-      (secondaryContactDataByPhone &&
-        ((!secondaryContactDataByPhone.email && email) ||
-          (!secondaryContactDataByPhone.phoneNumber && phoneNumber)))
+      email &&
+      !contactByEmailAndPhone &&
+      (primaryContactDataByPhone || secondaryContactDataByPhone) &&
+      ((primaryContactDataByPhone &&
+        primaryContactDataByPhone.email != email) ||
+        (secondaryContactDataByPhone &&
+          secondaryContactDataByPhone.email != email))
     ) {
-      let id = secondaryContactDataByEmail
-        ? secondaryContactDataByEmail.linkedId
-        : secondaryContactDataByPhone.linkedId;
-
-      if (secondaryContactDataByEmail && secondaryContactDataByPhone) {
-        id =
-          secondaryContactDataByEmail.createdAt >
-          secondaryContactDataByPhone.createdAt
-            ? secondaryContactDataByPhone.linkedId
-            : secondaryContactDataByEmail.linkedId;
-      }
       const newSecondaryContact =
         await contactRepository.createNewSecondaryContact(
-          id,
+          primaryContactDataByPhone
+            ? primaryContactDataByPhone.id
+            : secondaryContactDataByPhone.linkedId,
           phoneNumber,
           email
         );

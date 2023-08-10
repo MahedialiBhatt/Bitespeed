@@ -36,14 +36,29 @@ const ContactRepository = {
     email: string | null,
     phoneNumber: string | null
   ) {
-    const query = `SELECT * FROM contact WHERE email = ? OR phoneNumber = ? ORDER BY linkPrecedence;`;
+    const query = `    
+    SELECT *
+    FROM contact
+    WHERE email = ? OR phoneNumber = ?
+    OR (id IN (SELECT linkedId FROM contact WHERE email = ? OR phoneNumber = ?))
+    ORDER BY linkPrecedence;`;
 
     const [rows] = await mysql.execute(query, [
+      email ? email : null,
+      phoneNumber ? phoneNumber : null,
       email ? email : null,
       phoneNumber ? phoneNumber : null,
     ]);
 
     return rows;
+  },
+
+  async getContactByEmailAndPhone(email: string, phoneNumber: string) {
+    const query = `SELECT * FROM contact WHERE email = ? AND phoneNumber = ? ORDER BY createdAt LIMIT 1;`;
+
+    const [rows] = await mysql.execute(query, [email, phoneNumber]);
+
+    return !!rows[0];
   },
 
   async createNewPrimaryContact(phoneNumber?: string, email?: string) {
