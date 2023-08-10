@@ -20,10 +20,10 @@ class App {
   }
 
   private setController() {
+    this.app.use("/api", contactRouter);
     this.app.use("*", (req, res) => {
       res.send("OK").status(200);
     });
-    this.app.use("/api", contactRouter);
   }
 }
 
