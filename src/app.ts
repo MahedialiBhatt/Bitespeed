@@ -2,6 +2,7 @@ import { Application } from "express";
 import bodyParser from "body-parser";
 import express from "express";
 import dotenv from "dotenv";
+import { createDatabaseAndTable } from "./config/mysql";
 dotenv.config();
 
 class App {
@@ -10,6 +11,7 @@ class App {
   constructor() {
     this.app = express();
     this.setConfig();
+    this.dbInit();
     this.setController();
   }
 
@@ -22,6 +24,10 @@ class App {
     this.app.use("*", (req, res) => {
       res.send("OK").status(200);
     });
+  }
+
+  private dbInit() {
+    createDatabaseAndTable();
   }
 }
 
