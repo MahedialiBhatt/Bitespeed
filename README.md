@@ -5,7 +5,7 @@
   3. use npm run start OR npm run start:dev (on start DB and table will be Created)
 
 - Endpoint of identify (Here I assume SERVER_PORT = 3000)
-  POST localhost:3000/api.identify with BODY email or/and phoneNumber
+  POST localhost:3000/api/identify with BODY email or/and phoneNumber
 
 - cURL of identify:
 
@@ -15,6 +15,10 @@
   "email": "abc@gmail.com",
   "phoneNumber": "654321"
   }'
+
+- Service URL:- https://bitespeed-wnii.onrender.com
+
+- Identify endpoint:- https://bitespeed-wnii.onrender.com/api/identify
 
 Tech Stack:
 
