@@ -1,6 +1,7 @@
 import { Application } from "express";
 import bodyParser from "body-parser";
 import express from "express";
+import { contactRouter } from "./routes/contact";
 import dotenv from "dotenv";
 import { createDatabaseAndTable } from "./config/mysql";
 dotenv.config();
@@ -21,6 +22,7 @@ class App {
   }
 
   private setController() {
+    this.app.use("/api", contactRouter);
     this.app.use("*", (req, res) => {
       res.send("OK").status(200);
     });
