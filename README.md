@@ -23,3 +23,5 @@ Tech Stack:
 3.  TypeScript
 4.  MySQL
 5.  RestAPI
+
+(Note: There few corner cases which are not handled properly but for that wrote a mail to career@bitespeed.com, to seek clarification).
